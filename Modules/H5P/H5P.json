@@ -1,0 +1,22 @@
+{
+    "H5P": {
+        "item_id": "45955935",
+        "migration": [
+            "2023_04_26_120532_create_h5p_reports_table.php",
+            "2023_04_26_123631_addH5pIdToLessonsTable.php",
+            "2023_04_26_123941_create_h5p_contents_table.php",
+            "2023_04_26_175000_create_h5p_report_details_table.php",
+            "2023_04_27_133631_AddPermissions.php"
+        ],
+        "versions": [
+            "1.1.0"
+        ],
+        "url": [
+            "https://www.aorasoft.com/"
+        ],
+        "verifier": "uxauth",
+        "notes": [
+            "This is H5P module for upload any H5P to include in your course. Thanks for using."
+        ]
+    }
+}
