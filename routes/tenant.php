@@ -128,6 +128,7 @@ Route::group(['namespace' => 'Frontend'], function () {
     Route::post('review-delete/{id}', 'CommentController@deleteReview')->name('deleteReview')->middleware('auth');
     Route::post('comment-replay-delete/{id}', 'CommentController@deleteCommnetReply')->name('deleteCommentReply')->middleware('auth');
 
+    Route::post('set-firebase-token', 'FirebaseController@setFCMToken')->name('frontend.setFCMToken')->middleware('auth');
 
 });
 Route::group(['prefix' => 'saas', 'middleware' => ['auth']], function () {

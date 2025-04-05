@@ -1,0 +1,13 @@
+{
+    "name": "HDBank",
+    "alias": "hdbank",
+    "description": "",
+    "keywords": [],
+    "order": 0,
+    "providers": [
+        "Modules\\HDBank\\Providers\\HDBankServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

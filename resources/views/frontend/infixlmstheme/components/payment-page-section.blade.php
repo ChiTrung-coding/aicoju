@@ -355,6 +355,8 @@
                                                                 {{ $gateway->method }}
                                                             </a>
                                                         </form>
+                                                    @elseif($gateway->method == 'HDBank')
+                                                        @include('hdbank::payment_btn',['type'=>'payment','amount'=>$checkout->purchase_price, 'checkout' => $checkout])
                                                     @else
                                                         <form action="{{ route('paymentSubmit') }}" method="post">
                                                             @csrf

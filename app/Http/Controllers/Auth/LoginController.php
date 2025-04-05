@@ -100,7 +100,7 @@ class LoginController extends Controller
 
     protected function sendSuccessResponse()
     {
-        if (Auth::user()->role_id != 1) {
+        if (Auth::user()->role_id != User::SUPER_ADMIN_ROLE) {
             return redirect()->intended('student-dashboard');
         } else {
             return redirect()->intended('home');
@@ -417,10 +417,8 @@ class LoginController extends Controller
             return $this->sendLockoutResponse($request);
         }
 
-
         if ($this->attemptLogin($request)) {
-
-            if (Auth::user()->status == 0) {
+            if (Auth::user()->status == User::STATUS_DISABLED_ACCOUNT) {
                 Auth::logout();
 
                 Toastr::error('Your account has been disabled !', 'Failed');
@@ -442,7 +440,7 @@ class LoginController extends Controller
 
             }
 
-            if (Auth::user()->role_id != 1) {
+            if (Auth::user()->role_id != User::SUPER_ADMIN_ROLE) {
 
 
                 //device  limit
@@ -743,7 +741,7 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         if (Auth::check()) {
-            if (Auth::user()->role_id != 1) {
+            if (Auth::user()->role_id != User::SUPER_ADMIN_ROLE) {
                 $login = UserLogin::where('user_id', Auth::id())->where('status', 1)->latest()->first();
                 if ($login) {
                     $login->status = 0;

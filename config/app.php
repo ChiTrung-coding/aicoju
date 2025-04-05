@@ -1,5 +1,7 @@
 <?php
 
+use Modules\SystemSetting\Entities\Modules;
+
 return [
 
     'app_sync' => env('APP_SYNC', false),
@@ -195,8 +197,7 @@ return [
         App\Providers\MailConfigServiceProvider::class,
         //App\Providers\CompactThemeServiceProvider::class,
         //Barryvdh\DomPDF\ServiceProvider::class,
-
-
+        // \Modules\HDBank\Providers\HDBankServiceProvider::class,
     ],
 
     /*
@@ -255,6 +256,7 @@ return [
         'PaytmWallet' => Anand\LaravelPaytmWallet\Facades\PaytmWallet::class,
         'Paystack' => Unicodeveloper\Paystack\Facades\Paystack::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        'UtilityLog' => Devnav2902\Utilitylog\Facades\UtilityLog::class
     ],
     'debug_blacklist' => [
         '_COOKIE' => array_keys($_COOKIE),

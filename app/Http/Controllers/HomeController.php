@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\UserLogin;
 use Carbon\Carbon;
 use App\Models\User;
+use App\User as AppUser;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Schema;
 use Modules\Noticeboard\Entities\Noticeboard;
@@ -29,11 +30,11 @@ class HomeController extends Controller
 
     public function index()
     {
-        if (Auth::user()->role_id == 1) {
+        if (Auth::user()->role_id == AppUser::SUPER_ADMIN_ROLE) {
             return redirect()->route('dashboard');
-        } else if (Auth::user()->role_id == 2) {
+        } else if (Auth::user()->role_id == AppUser::TEACHER_ROLE) {
             return redirect()->route('dashboard');
-        } else if (Auth::user()->role_id == 3) {
+        } else if (Auth::user()->role_id == AppUser::STUDENT_ROLE) {
             return redirect()->route('studentDashboard');
         } else {
             return redirect('/');
@@ -45,17 +46,16 @@ class HomeController extends Controller
     {
 
         try {
-            if (Auth::user()->role_id == 3) {
+            if (Auth::user()->role_id == AppUser::STUDENT_ROLE) {
                 return redirect()->route('studentDashboard');
             }
+
             if (isModuleActive('Affiliate') && Auth::user()->role->name == 'Affiliate') {
                 return redirect()->route('affiliate.my_affiliate.index');
             }
 
             $user = Auth::user();
-            if ($user->role_id == 1) {
-
-
+            if ($user->role_id == AppUser::SUPER_ADMIN_ROLE) {
                 $recentEnroll = CourseEnrolled::latest()->take(4)->select(
                     'reveune', 'course_id', 'user_id', 'purchase_price'
                 )->with('course', 'course.user', 'user')->get();
@@ -137,7 +137,7 @@ class HomeController extends Controller
                 ->whereMonth('issueDate', '=', date('m'));
 
 
-            if ($user->role_id != 1) {
+            if ($user->role_id != AppUser::SUPER_ADMIN_ROLE) {
                 $withdraws_query->where('instructor_id', $user->id);
             }
             $withdraws = $withdraws_query->get();
@@ -159,12 +159,12 @@ class HomeController extends Controller
                 });
             }
             $allCourses = $query4->get();
-            $enable_courses = $allCourses->where('status', 1)->count();
-            $disable_courses = $allCourses->where('status', 0)->count();
+            $enable_courses = $allCourses->where('status', Course::STATUS_ENABLED_COURSE)->count();
+            $disable_courses = $allCourses->where('status', Course::STATUS_DISABLED_COURSE)->count();
 
-            $courses = $allCourses->where('type', 1)->count();
-            $quizzes = $allCourses->where('type', 2)->count();
-            $classes = $allCourses->where('type', 3)->count();
+            $courses = $allCourses->where('type', Course::TYPE_COURSE)->count();
+            $quizzes = $allCourses->where('type', Course::TYPE_QUIZ)->count();
+            $classes = $allCourses->where('type', Course::TYPE_VIRTUAL_CLASS)->count();
 
             $course_overview['active'] = $enable_courses;
             $course_overview['pending'] = $disable_courses;
@@ -190,7 +190,7 @@ class HomeController extends Controller
 
             $students = null;
             if (isModuleActive('CPD')) {
-                $students = User::with('cpds')->where('role_id', 3)->get();
+                $students = User::with('cpds')->where('role_id', AppUser::STUDENT_ROLE)->get();
             }
 
 ///test start

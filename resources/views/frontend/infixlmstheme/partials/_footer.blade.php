@@ -85,6 +85,8 @@
     <input type="hidden" name="item_list" class="item_list" value="{{url('getItemList')}}">
     <input type="hidden" name="enroll_cart" class="enroll_cart" value="{{url('enrollOrCart')}}">
     <input type="hidden" name="csrf_token" class="csrf_token" value="{{csrf_token()}}">
+    <input type="hidden" name="fcm_vapid_key" class="fcm_vapid_key" value="BMT0pwdFVkRGyc5ofFj0FfqSEhidIasXRE9vraR1MelbmNnXIqcEn9ssyUhXMZYDi8ZJ1x2BW-kbQRw1hy9UVWo">
+    <input type="hidden" name="set_firebase_token" class="set_firebase_token" value="{{ route('frontend.setFCMToken') }}">
     <!--/ UP_ICON -->
 
     <x-footer-cookie/>
@@ -176,6 +178,7 @@
     </div>
 
     <script src="{{asset('public/frontend/infixlmstheme/js/app.js'.assetVersion())}}"></script>
+    <script type="module" src="{{asset('public/frontend/infixlmstheme/js/main.js'.assetVersion())}}"></script>
 
     <script src="{{asset('public/backend/js/summernote-bs4.min.js')}}{{assetVersion()}}"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key={{Settings('gmap_key') }}"></script>

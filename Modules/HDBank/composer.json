@@ -1,0 +1,23 @@
+{
+    "name": "vuna/hdbank",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nguyen Anh Vu",
+            "email": "nguyenanhvu.work@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\HDBank\\": ""
+        }
+    }
+}

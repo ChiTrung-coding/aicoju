@@ -34,6 +34,7 @@ class VerifyCsrfToken extends Middleware
         '/flutterwave/*',
         'callback/*',
         "mollie/*",
-        "tranzak/*"
+        "tranzak/*",
+        'hdbank/*',
     ];
 }

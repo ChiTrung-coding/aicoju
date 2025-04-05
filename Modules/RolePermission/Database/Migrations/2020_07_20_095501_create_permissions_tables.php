@@ -364,6 +364,11 @@ class CreatePermissionsTables extends Migration
             //last  303
         ];
 
+        $lang_code = 'en';
+        foreach ($sql as $key => $value) {
+            $sql[$key]['name'] = json_encode([$lang_code => $value['name']]);
+        }
+
         Permission::withoutEvents(function () use ($sql) {
             Permission::insert($sql);
         });

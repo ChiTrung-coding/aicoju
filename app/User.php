@@ -65,6 +65,13 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasSlug;
     use HasApiTokens, Notifiable, UserChatMethods, Liker;
 
+    // status
+    const STATUS_DISABLED_ACCOUNT = 0;
+    // role
+    const SUPER_ADMIN_ROLE = 1;
+    const TEACHER_ROLE = 2;
+    const STUDENT_ROLE = 3;
+
     protected $connection;
     protected $guarded = ['id'];
     protected $hidden = [
@@ -89,18 +96,18 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         parent::boot();
         self::created(function ($model) {
-            if ($model->role_id == 2) {
+            if ($model->role_id == self::TEACHER_ROLE) {
                 saasPlanManagement('instructor', 'create');
             }
-            if ($model->role_id == 3) {
+            if ($model->role_id == self::STUDENT_ROLE) {
                 saasPlanManagement('student', 'create');
             }
         });
         self::deleted(function ($model) {
-            if ($model->role_id == 2) {
+            if ($model->role_id == self::TEACHER_ROLE) {
                 saasPlanManagement('instructor', 'delete');
             }
-            if ($model->role_id == 3) {
+            if ($model->role_id == self::STUDENT_ROLE) {
                 saasPlanManagement('student', 'delete');
             }
 
@@ -656,17 +663,17 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function isSuperAdmin()
     {
-        return $this->role_id == 1;
+        return $this->role_id == self::SUPER_ADMIN_ROLE;
     }
 
     public function isInstructor(): bool
     {
-        return $this->role_id == 2;
+        return $this->role_id == self::TEACHER_ROLE;
     }
 
     public function isStudent()
     {
-        return $this->role_id == 3;
+        return $this->role_id == self::STUDENT_ROLE;
     }
 
     public function isStaff()

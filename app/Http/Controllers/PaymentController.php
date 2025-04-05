@@ -28,6 +28,7 @@ use Modules\Gift\Entities\GiftCart;
 use Modules\GoogleCalendar\Events\GoogleCalendarEventAddAttendee;
 use Modules\GoogleMeet\Events\MeetingAddAttendeeEvent;
 use Modules\Group\Events\GroupMemberCreate;
+use Modules\HDBank\Helpers\InvoiceHelper;
 use Modules\Installment\Http\Controllers\InstallmentPurchaseController;
 use Modules\Instamojo\Http\Controllers\InstamojoController;
 use Modules\Invoice\Repositories\Interfaces\InvoiceRepositoryInterface;
@@ -55,7 +56,7 @@ use Modules\Tranzak\Services\TranzakService;
 use Modules\Wallet\Http\Controllers\WalletController;
 use Omnipay\Omnipay;
 use Unicodeveloper\Paystack\Facades\Paystack;
-
+use UtilityLog;
 
 class PaymentController extends Controller
 {
@@ -114,8 +115,9 @@ class PaymentController extends Controller
             $bill->payment_method = null;
             $bill->save();
         } else {
-
+            
             $bill = BillingDetails::where('id', $request->old_billing)->first();
+
             if ($request->previous_address_edit == 1) {
                 $bill->user_id = Auth::id();
                 $bill->tracking_id = $request->tracking_id;
@@ -142,7 +144,10 @@ class PaymentController extends Controller
         }
 
         $tracking = Cart::where('user_id', Auth::id())->first()->tracking;
-        $checkout_info = Checkout::where('tracking', $tracking)->where('user_id', Auth::id())->latest()->first();
+        $checkout_info = Checkout::where('tracking', $tracking)
+            ->with(['user'])
+            ->where('user_id', Auth::id())->latest()
+            ->first();
         $carts = Cart::with('course')->where('tracking', $checkout_info->tracking)->get();
 
         if ($checkout_info) {
@@ -197,7 +202,6 @@ class PaymentController extends Controller
                 }
             }
 
-
             if ($checkout_info->purchase_price == 0) {
                 $checkout_info->payment_method = 'None';
                 $bill->payment_method = 'None';
@@ -242,6 +246,28 @@ class PaymentController extends Controller
                 }
                 return $this->redirectToDashboard();
             } else {
+                $checkout_info->bank_bill_id = $bill->bank_bill_id;
+                $response = InvoiceHelper::create_invoice($checkout_info);
+
+                if (!$response) {
+                    UtilityLog::writeLog('error', 'Create invoice error'. sprintf('[%s][%s]', __CLASS__, __FUNCTION__));
+
+                    Toastr::error("Something Went Wrong", 'Failed');
+                    return \redirect()->back();
+                }
+
+                if ($response['code'] == '00') {
+                    $bill->bank_bill_id = $response['data']['billId'];
+                    $bill->save();
+                } else {
+                    UtilityLog::writeLog(
+                        'error', 
+                        'Error response '.sprintf('[%s][%s]', __CLASS__, __FUNCTION__), 
+                        null,
+                        $response
+                    );
+                }
+
                 $this->postEvent([
                     'name' => 'add_billing_details',
                     'params' => [
@@ -885,6 +911,8 @@ class PaymentController extends Controller
                 if (!$user) {
                     $user = Auth::user();
                 }
+            } else {
+                $user = request()->user_id ? User::find(request()->user_id) : null;
             }
 
             if ($user) {

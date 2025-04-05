@@ -47,6 +47,14 @@ class Course extends Model
 
     public $translatable = ['about', 'outcomes', 'requirements', 'title'];
 
+    // course status
+    const STATUS_ENABLED_COURSE = 1;
+    const STATUS_DISABLED_COURSE = 0;
+    // course type
+    const TYPE_COURSE = 1;
+    const TYPE_QUIZ = 2;
+    const TYPE_VIRTUAL_CLASS = 3;
+
     public function forums()
     {
         return $this->hasMany(Forum::class, 'course_id', 'id');

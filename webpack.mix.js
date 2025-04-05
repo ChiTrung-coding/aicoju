@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const path = require('path');
 
 /*
  |--------------------------------------------------------------------------
@@ -10,6 +11,23 @@ const mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
+
+mix.webpackConfig({
+    resolve: {
+        alias: {
+            '@public': path.resolve(__dirname, 'public')
+        }
+    }
+});
+
+var front_end_main_js = 'resources/js/frontend/main/';
+
+mix.js([
+    front_end_main_js + 'init.js',
+], 'public/frontend/infixlmstheme/js/main.js');
+
+return;
+
 var backend_plugin_js = 'resources/js/backend/';
 
 mix

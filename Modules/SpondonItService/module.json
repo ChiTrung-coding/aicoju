@@ -1,0 +1,13 @@
+{
+    "name": "SpondonItService",
+    "alias": "spondonitservice",
+    "description": "",
+    "keywords": [],
+    "order": 0,
+    "providers": [
+        "Modules\\SpondonItService\\Providers\\SpondonItServiceServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

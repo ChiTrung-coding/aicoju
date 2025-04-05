@@ -20,6 +20,7 @@
         "brian2694/laravel-toastr": "^5.54",
         "bryceandy/laravel_pesapal": "^2.0",
         "cocur/slugify": "^4.0",
+        "devnav2902/utilitylog": "^1.0",
         "doctrine/dbal": "^3.2.0",
         "drewm/mailchimp-api": "^2.5",
         "freshbitsweb/laravel-google-analytics-4-measurement-protocol": "^1.2",
@@ -30,6 +31,7 @@
         "ivopetkov/html5-dom-document-php": "^2.3",
         "jenssegers/agent": "^2.6",
         "joisarjignesh/bigbluebutton": "^2.3",
+        "kreait/laravel-firebase": "^5.9",
         "laravel/framework": "^10.0",
         "laravel/legacy-factories": "^1.1",
         "laravel/passport": "^11.0",
@@ -74,7 +76,6 @@
         "spatie/laravel-translatable": "6.5.1",
         "spatie/valuestore": "^1.2",
         "spondonit/ar-php": "^1.0",
-        "spondonit/lms-service": "^2.0",
         "spondonit/mobilpay": "^1.0",
         "stevebauman/location": "^6.3",
         "toshy/bunnynet-php": "^3.3",
@@ -113,7 +114,8 @@
         "files": [
             "app/Helpers/Helper.php",
             "app/Helpers/Constant.php",
-            "app/Helpers/SaasHelper.php"
+            "app/Helpers/SaasHelper.php",
+            "Modules/SpondonItService/Helpers/Helper.php"
         ],
         "psr-4": {
             "App\\": "app/",

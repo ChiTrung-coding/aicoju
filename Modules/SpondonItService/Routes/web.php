@@ -1,0 +1,36 @@
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+Route::group(['namespace' => 'Modules\SpondonItService\Http\Controllers', 'middleware' => 'web'], function () {
+    Route::group(['prefix' => 'install'], function(){
+        Route::get('pre-requisite', 'InstallController@preRequisite')->name('service.preRequisite');
+        Route::get('license', 'InstallController@license')->name('service.license');
+        Route::post('license', 'InstallController@post_license');
+        Route::get('database', 'InstallController@database')->name('service.database');
+        Route::post('database', 'InstallController@post_database');
+        Route::get('done', 'InstallController@done')->name('service.done');
+        Route::get('uninstall', 'InstallController@uninstall')->name('service.uninstall');
+        Route::get('service/verification', 'CheckController@verify');
+    });
+
+    Route::get('/update', 'UpdateController@index')->name('service.update');
+    Route::post('/update', 'UpdateController@update');
+    Route::post('/download', 'UpdateController@download')->name('service.delete');
+    Route::post('/install-adons', 'InstallController@ManageAddOnsValidation')->name('ManageAddOnsValidation');
+    Route::post('/install-theme', 'InstallController@installTheme')->name('service.theme.install');
+    Route::post('/revoke', 'LicenseController@revoke')->name('service.revoke');
+    Route::post('/revoke-adons', 'LicenseController@revokeModule')->name('service.revoke.module');
+    Route::post('/revoke-theme', 'LicenseController@revokeTheme')->name('service.revoke.theme');
+
+});
+
